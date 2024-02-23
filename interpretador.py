@@ -151,5 +151,4 @@ prefixo2 = "80718331000109MAGNO MARTINS ENGENHARIA LTDA                         
 prefixo3 = "00000000000000"
 cadastrar_cliente(caminho_completo, prefixo, prefixo2)
 
-
-#testando o upload no githup
+# continuar - Extrair do repositorio cliente a valor da data do contrato
