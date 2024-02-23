@@ -150,3 +150,6 @@ prefixo = "R02807183310001092023"
 prefixo2 = "80718331000109MAGNO MARTINS ENGENHARIA LTDA                               "
 prefixo3 = "00000000000000"
 cadastrar_cliente(caminho_completo, prefixo, prefixo2)
+
+
+#testando o upload no githup
