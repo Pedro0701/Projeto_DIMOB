@@ -32,13 +32,25 @@ def cadastrar_cliente(caminho_completo, prefixo, prefixo2):
             contrato = numero_contrato(caminho_json)
             data_formatada = cadastro_data_contrato(caminho_json)
             
-            renda_janeiro = valores_janeiro(caminho_json)
+            janeiro = extrair_valores_mes(caminho_json,"jan")
+            fevereiro = extrair_valores_mes(caminho_json,"fev")
+            março = extrair_valores_mes(caminho_json,"mar")
+            abril = extrair_valores_mes(caminho_json,"abr")
+            maio = extrair_valores_mes(caminho_json,"maio")
+            junho = extrair_valores_mes(caminho_json,"jun")
+            julho = extrair_valores_mes(caminho_json,"jul")
+            agosto = extrair_valores_mes(caminho_json,"ago")
+            setembro= extrair_valores_mes(caminho_json,"set")
+            outubro = extrair_valores_mes(caminho_json,"out")
+            novembro = extrair_valores_mes(caminho_json,"nov")
+            dezembro= extrair_valores_mes(caminho_json,"dez")
+            
 
             # Formata o contador para 7 caracteres preenchidos com zeros à esquerda
             contador_formatado = f'{contador:07}'
 
             with open(caminho_completo, 'a') as arquivo:
-                arquivo.write(prefixo + contador_formatado + prefixo2 + cnpj_cpf_cliente + nome_cliente + contrato + data_formatada + renda_janeiro + '\n')
+                arquivo.write(prefixo + contador_formatado + prefixo2 + cnpj_cpf_cliente + nome_cliente + contrato + data_formatada + janeiro + fevereiro + março + abril + maio + junho + julho + agosto + setembro + outubro + novembro + dezembro + '\n')
 
             contador += 1
             registros += 1
@@ -144,19 +156,22 @@ def cadastro_data_contrato(caminho_json):
     except:
         pass
 
-def valores_janeiro(caminho_json):
-    
+def extrair_valores_mes(caminho_json, nome_mes):
     with open(caminho_json, 'r') as file:
         dados_json = json.load(file)
-        bruto = dados_json.get('valor_aluguel_jan')
-        comissao = dados_json.get('valor_comissao_jan')
-         
+        bruto = dados_json.get(f'valor_aluguel_{nome_mes.lower()}')
 
     try:
+        # verifica se teve movimentação no mês
+        if bruto == '':
+            sem_valor = '0' * 42
+            return sem_valor
+        
         # Substitui vírgula por ponto e converte para float
-        valor_bruto_float = float(bruto.replace(',', '.'))
-        valor_comissao_float = float(comissao.replace(',', '.'))
+        valor_bruto_float = float(bruto)
 
+        # Se bruto for zero, a comissão também é considerada zero
+        valor_comissao_float = 0 if valor_bruto_float == 0 else float(bruto)
 
         # Remove o ponto decimal e formata o valor com 14 posições
         valor_bruto_sem_ponto = '{:014}'.format(int(valor_bruto_float * 100))
@@ -165,7 +180,10 @@ def valores_janeiro(caminho_json):
         return valor_bruto_sem_ponto + valor_comissao_sem_ponto + prefixo3
 
     except ValueError:
-        print('Valor inválido. Certifique-se de digitar um número. Tente novamente.')
+        print(f'Valor inválido para o mês de {nome_mes}. Certifique-se de digitar um número. Tente novamente.')
+        return None
+
+
 
 
 diretorio_do_arquivo = r'C:\\Users\\auxiliar.contabil\\Magno Martins\\CONTABILIDADE - Documentos\\TRIBUTOS\DECLARAÇÔES\DIMOB 2024\\MAGNO ENG'
