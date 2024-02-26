@@ -2,14 +2,7 @@ import os
 import json
 import random
 import glob
-
-def criar_diretorio(diretorio):
-    # Verifica se o diretório existe, se não, cria
-    if not os.path.exists(diretorio):
-        os.makedirs(diretorio)
-
-def obter_caminho_completo(diretorio, nome_arquivo):
-    return os.path.join(diretorio, nome_arquivo)
+from tkinter import Tk, filedialog
 
 def criando_header(caminho_completo):
     header = 'DIMOB' + (369 * ' ')
@@ -38,7 +31,6 @@ def criando_ficha_dados_iniciais(caminho_completo):
 def cadastrar_cliente(caminho_completo):
     contador = 1
     registros = 0
-    diretorio_json = 'C:\\Users\\auxiliar.contabil\\Magno Martins\\CONTABILIDADE - Documentos\\TRIBUTOS\\DECLARAÇÔES\\DIMOB 2024\\MAGNO ENG\\repositorio_clientes'  # Substitua pelo caminho do diretório com os arquivos JSON
     finalizar_programa = False
 
     while finalizar_programa == False:
@@ -196,6 +188,7 @@ def extraindo_valores_mes(caminho_json, nome_mes):
         dados_json = json.load(file)
         bruto = dados_json.get(f'valor_aluguel_{nome_mes.lower()}')
         comissao = dados_json.get(f'valor_comissao_{nome_mes.lower()}')
+        imposto_do_mes = '00000000000000'
 
 
     try:
@@ -217,7 +210,7 @@ def extraindo_valores_mes(caminho_json, nome_mes):
         valor_bruto_sem_separador = str(valor_bruto_sem_separador)
         valor_comissao_sem_separador = str(valor_comissao_sem_separador)
 
-        return valor_bruto_sem_separador + valor_comissao_sem_separador + prefixo3
+        return valor_bruto_sem_separador + valor_comissao_sem_separador + imposto_do_mes
 
     except ValueError:
         print(f'Valor inválido para o mês de {nome_mes}. Certifique-se de digitar um número. Tente novamente.')
@@ -243,15 +236,39 @@ def finalizar_registro(caminho_completo):
     with open(caminho_completo, 'a') as arquivo:
             arquivo.write(trailler_da_declaração)
 
-diretorio_do_arquivo = r'C:\\Users\\auxiliar.contabil\\Magno Martins\\CONTABILIDADE - Documentos\\TRIBUTOS\DECLARAÇÔES\DIMOB 2024\\MAGNO ENG'
-nome_do_arquivo = 'arquivo.txt'
+def criar_diretorio(diretorio):
+    # Verifica se o diretório existe, se não, cria
+    if not os.path.exists(diretorio):
+        os.makedirs(diretorio)
 
-criar_diretorio(diretorio_do_arquivo)
-caminho_completo = obter_caminho_completo(diretorio_do_arquivo, nome_do_arquivo)
+def obter_caminho_completo(diretorio, nome_arquivo):
+    return os.path.join(diretorio, nome_arquivo)
 
-#prefixo = 'R02807183310001092023'
-#prefixo2 = '80718331000109MAGNO MARTINS ENGENHARIA LTDA                               '
-prefixo3 = '00000000000000'
+def obter_nome_unico(diretorio, nome_base):
+    contador = 1
+    nome_arquivo = f'{nome_base}_{contador}.txt'
+    while os.path.exists(os.path.join(diretorio, nome_arquivo)):
+        contador += 1
+        nome_arquivo = f'{nome_base}_{contador}.txt'
+    return nome_arquivo
+
+# Abrir a janela de seleção de diretório
+root = Tk()
+root.withdraw()  # Ocultar a janela principal
+
+# Perguntar ao usuário onde estão os arquivos JSON
+root = Tk()
+root.withdraw()  # Ocultar a janela principal
+diretorio_json = filedialog.askdirectory(title="SELECIONE O DIRETÓRIO DE ARQUIVOS JSON")
+
+diretorio_de_saida = filedialog.askdirectory(title="SALVAR ARQUIVO DE SAÍDA")
+
+nome_do_arquivo_base = 'resultado'
+
+nome_do_arquivo_unico = obter_nome_unico(diretorio_de_saida, nome_do_arquivo_base)
+
+criar_diretorio(diretorio_de_saida)
+caminho_completo = obter_caminho_completo(diretorio_de_saida, nome_do_arquivo_unico)
 
 criando_header(caminho_completo)
 criando_ficha_dados_iniciais(caminho_completo)
