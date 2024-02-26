@@ -11,7 +11,31 @@ def criar_diretorio(diretorio):
 def obter_caminho_completo(diretorio, nome_arquivo):
     return os.path.join(diretorio, nome_arquivo)
 
-def cadastrar_cliente(caminho_completo, prefixo, prefixo2):
+def criando_header(caminho_completo):
+    header = 'DIMOB' + (369 * ' ')
+    with open(caminho_completo, 'a') as arquivo:
+            arquivo.write(header + '\n')
+
+def criando_ficha_dados_iniciais(caminho_completo):
+    tipo = 'R01'
+    
+    # definir variaveis globais 
+    global nome_empresa
+    global cnpj_declarante
+
+    cnpj_declarante = input('Digite o CNPJ do declarante: ')
+    
+    ano = '2023'
+    retificadora = 22 * '0'
+
+    nome_empresa = input('Digite o nome da empresa: ')
+    nome_empresa = nome_empresa.ljust(60)
+    cpf_responsavel = '02972859987'
+    endereco = 'AV. RIO BRANCO, 333 - SALAS 202 A 208 - ED. COM. MIRAGE TOWER - CENTRO                                                  SC8105                              '
+    with open(caminho_completo, 'a') as arquivo:
+            arquivo.write(tipo + cnpj_declarante + ano + retificadora + nome_empresa + cpf_responsavel + endereco + '\n')
+
+def cadastrar_cliente(caminho_completo):
     contador = 1
     registros = 0
     diretorio_json = 'C:\\Users\\auxiliar.contabil\\Magno Martins\\CONTABILIDADE - Documentos\\TRIBUTOS\\DECLARAÇÔES\\DIMOB 2024\\MAGNO ENG\\repositorio_clientes'  # Substitua pelo caminho do diretório com os arquivos JSON
@@ -27,36 +51,47 @@ def cadastrar_cliente(caminho_completo, prefixo, prefixo2):
             return
 
         for caminho_json in arquivos_json:
+            
+            tipo = 'R02'
+            ano = '2023'
+            
             cnpj_cpf_cliente = cadastro_cnpj_cpf_cliente(caminho_json)
             nome_cliente = obter_nome_cliente(caminho_json)
             contrato = numero_contrato(caminho_json)
             data_formatada = cadastro_data_contrato(caminho_json)
             
-            janeiro = extrair_valores_mes(caminho_json,"jan")
-            fevereiro = extrair_valores_mes(caminho_json,"fev")
-            março = extrair_valores_mes(caminho_json,"mar")
-            abril = extrair_valores_mes(caminho_json,"abr")
-            maio = extrair_valores_mes(caminho_json,"maio")
-            junho = extrair_valores_mes(caminho_json,"jun")
-            julho = extrair_valores_mes(caminho_json,"jul")
-            agosto = extrair_valores_mes(caminho_json,"ago")
-            setembro= extrair_valores_mes(caminho_json,"set")
-            outubro = extrair_valores_mes(caminho_json,"out")
-            novembro = extrair_valores_mes(caminho_json,"nov")
-            dezembro= extrair_valores_mes(caminho_json,"dez")
+            janeiro = extraindo_valores_mes(caminho_json,"jan")
+            fevereiro = extraindo_valores_mes(caminho_json,"fev")
+            março = extraindo_valores_mes(caminho_json,"mar")
+            abril = extraindo_valores_mes(caminho_json,"abr")
+            maio = extraindo_valores_mes(caminho_json,"maio")
+            junho = extraindo_valores_mes(caminho_json,"jun")
+            julho = extraindo_valores_mes(caminho_json,"jul")
+            agosto = extraindo_valores_mes(caminho_json,"ago")
+            setembro= extraindo_valores_mes(caminho_json,"set")
+            outubro = extraindo_valores_mes(caminho_json,"out")
+            novembro = extraindo_valores_mes(caminho_json,"nov")
+            dezembro= extraindo_valores_mes(caminho_json,"dez")
             
+            tipo_imovel = 'U'
+            endereco_imovel = extraindo_endereco_imovel(caminho_json)
+            cep = extraindo_cep(caminho_json)
+            codido_municipio = '8105'
+            reservado_20 = 20 * ' '
+            uf = 'SC'
+            reservado_10 = 10 * ' '
 
             # Formata o contador para 7 caracteres preenchidos com zeros à esquerda
             contador_formatado = f'{contador:07}'
 
             with open(caminho_completo, 'a') as arquivo:
-                arquivo.write(prefixo + contador_formatado + prefixo2 + cnpj_cpf_cliente + nome_cliente + contrato + data_formatada + janeiro + fevereiro + março + abril + maio + junho + julho + agosto + setembro + outubro + novembro + dezembro + '\n')
+                arquivo.write(tipo + cnpj_declarante + ano + contador_formatado + cnpj_declarante + nome_empresa + cnpj_cpf_cliente + nome_cliente + contrato + data_formatada + janeiro + fevereiro + março + abril + maio + junho + julho + agosto + setembro + outubro + novembro + dezembro + tipo_imovel + endereco_imovel + cep + codido_municipio + reservado_20 + uf + reservado_10 + '\n')
 
             contador += 1
             registros += 1
 
             os.system('cls')
-            print('Cliente Cadastrado com SUCESSO!\n')
+            print('Clientes Cadastrados com SUCESSO!\n')
         
             #Finalizar o programa quando acabar os arquivos
             if len(arquivos_json) <= registros:
@@ -156,35 +191,57 @@ def cadastro_data_contrato(caminho_json):
     except:
         pass
 
-def extrair_valores_mes(caminho_json, nome_mes):
+def extraindo_valores_mes(caminho_json, nome_mes):
     with open(caminho_json, 'r') as file:
         dados_json = json.load(file)
         bruto = dados_json.get(f'valor_aluguel_{nome_mes.lower()}')
+        comissao = dados_json.get(f'valor_comissao_{nome_mes.lower()}')
+
 
     try:
         # verifica se teve movimentação no mês
+        # se o bruto for zero, a comissao é zero
         if bruto == '':
             sem_valor = '0' * 42
             return sem_valor
         
         # Substitui vírgula por ponto e converte para float
         valor_bruto_float = float(bruto)
-
-        # Se bruto for zero, a comissão também é considerada zero
-        valor_comissao_float = 0 if valor_bruto_float == 0 else float(bruto)
+        valor_comissao_float = float(comissao)
 
         # Remove o ponto decimal e formata o valor com 14 posições
-        valor_bruto_sem_ponto = '{:014}'.format(int(valor_bruto_float * 100))
-        valor_comissao_sem_ponto = '{:014}'.format(int(valor_comissao_float * 100))
+        valor_bruto_sem_separador = '{:014}'.format(int(valor_bruto_float * 100))
+        valor_comissao_sem_separador = '{:014}'.format(int(valor_comissao_float * 100))
 
-        return valor_bruto_sem_ponto + valor_comissao_sem_ponto + prefixo3
+        # converter os valores para strings
+        valor_bruto_sem_separador = str(valor_bruto_sem_separador)
+        valor_comissao_sem_separador = str(valor_comissao_sem_separador)
+
+        return valor_bruto_sem_separador + valor_comissao_sem_separador + prefixo3
 
     except ValueError:
         print(f'Valor inválido para o mês de {nome_mes}. Certifique-se de digitar um número. Tente novamente.')
         return None
 
+def extraindo_endereco_imovel(caminho_json):
+    with open(caminho_json, 'r', encoding='utf-8') as file:
+            dados_json = json.load(file)
+            endereco_imovel = dados_json.get('endereco_imovel')
+            endereco_imovel = endereco_imovel.ljust(60)
+            return endereco_imovel
 
+def extraindo_cep(caminho_json):
+    with open(caminho_json, 'r', encoding='utf-8') as file:
+            dados_json = json.load(file)
+            cep = dados_json.get('cep')
+            cep = cep.replace('-','')
+            
+            return cep
 
+def finalizar_registro(caminho_completo):
+    trailler_da_declaração = 'T9'+ (' ' * 100)
+    with open(caminho_completo, 'a') as arquivo:
+            arquivo.write(trailler_da_declaração)
 
 diretorio_do_arquivo = r'C:\\Users\\auxiliar.contabil\\Magno Martins\\CONTABILIDADE - Documentos\\TRIBUTOS\DECLARAÇÔES\DIMOB 2024\\MAGNO ENG'
 nome_do_arquivo = 'arquivo.txt'
@@ -192,8 +249,11 @@ nome_do_arquivo = 'arquivo.txt'
 criar_diretorio(diretorio_do_arquivo)
 caminho_completo = obter_caminho_completo(diretorio_do_arquivo, nome_do_arquivo)
 
-prefixo = 'R02807183310001092023'
-prefixo2 = '80718331000109MAGNO MARTINS ENGENHARIA LTDA                               '
+#prefixo = 'R02807183310001092023'
+#prefixo2 = '80718331000109MAGNO MARTINS ENGENHARIA LTDA                               '
 prefixo3 = '00000000000000'
-cadastrar_cliente(caminho_completo, prefixo, prefixo2)
 
+criando_header(caminho_completo)
+criando_ficha_dados_iniciais(caminho_completo)
+cadastrar_cliente(caminho_completo)
+finalizar_registro(caminho_completo)
