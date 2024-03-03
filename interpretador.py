@@ -52,18 +52,18 @@ def cadastrar_cliente(caminho_completo):
             contrato = numero_contrato(caminho_json)
             data_formatada = cadastro_data_contrato(caminho_json)
             
-            janeiro = extraindo_valores_mes(caminho_json,"jan")
-            fevereiro = extraindo_valores_mes(caminho_json,"fev")
-            março = extraindo_valores_mes(caminho_json,"mar")
-            abril = extraindo_valores_mes(caminho_json,"abr")
+            janeiro = extraindo_valores_mes(caminho_json,"janeiro")
+            fevereiro = extraindo_valores_mes(caminho_json,"fevereiro")
+            março = extraindo_valores_mes(caminho_json,"marco")
+            abril = extraindo_valores_mes(caminho_json,"abril")
             maio = extraindo_valores_mes(caminho_json,"maio")
-            junho = extraindo_valores_mes(caminho_json,"jun")
-            julho = extraindo_valores_mes(caminho_json,"jul")
-            agosto = extraindo_valores_mes(caminho_json,"ago")
-            setembro= extraindo_valores_mes(caminho_json,"set")
-            outubro = extraindo_valores_mes(caminho_json,"out")
-            novembro = extraindo_valores_mes(caminho_json,"nov")
-            dezembro= extraindo_valores_mes(caminho_json,"dez")
+            junho = extraindo_valores_mes(caminho_json,"junho")
+            julho = extraindo_valores_mes(caminho_json,"julho")
+            agosto = extraindo_valores_mes(caminho_json,"agosto")
+            setembro= extraindo_valores_mes(caminho_json,"setembro")
+            outubro = extraindo_valores_mes(caminho_json,"outubro")
+            novembro = extraindo_valores_mes(caminho_json,"novembro")
+            dezembro= extraindo_valores_mes(caminho_json,"dezembro")
             
             tipo_imovel = 'U'
             endereco_imovel = extraindo_endereco_imovel(caminho_json)
@@ -77,7 +77,13 @@ def cadastrar_cliente(caminho_completo):
             contador_formatado = f'{contador:07}'
 
             with open(caminho_completo, 'a') as arquivo:
-                arquivo.write(tipo + cnpj_declarante + ano + contador_formatado + cnpj_declarante + nome_empresa + cnpj_cpf_cliente + nome_cliente + contrato + data_formatada + janeiro + fevereiro + março + abril + maio + junho + julho + agosto + setembro + outubro + novembro + dezembro + tipo_imovel + endereco_imovel + cep + codido_municipio + reservado_20 + uf + reservado_10 + '\n')
+                arquivo.write(
+    tipo + cnpj_declarante + ano + contador_formatado + cnpj_declarante + nome_empresa +
+    cnpj_cpf_cliente + nome_cliente + contrato + data_formatada + janeiro + fevereiro +
+    março + abril + maio + junho + julho + agosto + setembro + outubro + novembro +
+    dezembro + tipo_imovel + endereco_imovel + cep + codido_municipio + reservado_20 +
+    uf + reservado_10 + '\n'
+)
 
             contador += 1
             registros += 1
@@ -108,7 +114,7 @@ def obter_nome_cliente(caminho_json):
             
     except Exception as e:
         print(f'Erro ao obter o nome do cliente do JSON {caminho_json}: {e}')
-        return None
+        return 'SEM NOME'
 
 def limpar_cpf(cpf):
     # Remove pontos, barras e hífens do CPF
@@ -131,7 +137,7 @@ def cadastro_cnpj_cpf_cliente(caminho_json):
 
         except Exception as e:
             print(f'Erro ao obter o CPF/CNPJ do JSON {caminho_json}: {e}')
-            return None
+            return 'SEM CPF'
 
 def numero_contrato(caminho_json):
     try:
@@ -186,19 +192,22 @@ def cadastro_data_contrato(caminho_json):
 def extraindo_valores_mes(caminho_json, nome_mes):
     with open(caminho_json, 'r') as file:
         dados_json = json.load(file)
-        bruto = dados_json.get(f'valor_aluguel_{nome_mes.lower()}')
+        bruto = dados_json.get(f"valor_aluguel_{nome_mes.lower()}")
         comissao = dados_json.get(f'valor_comissao_{nome_mes.lower()}')
         imposto_do_mes = '00000000000000'
-
 
     try:
         # verifica se teve movimentação no mês
         # se o bruto for zero, a comissao é zero
-        if bruto == '':
+        if bruto is None or bruto == '':
             sem_valor = '0' * 42
             return sem_valor
         
-        # Substitui vírgula por ponto e converte para float
+        # Substitui vírgula por ponto se houver
+        bruto = bruto.replace(',', '') if isinstance(bruto, str) else str(bruto)
+        comissao = comissao.replace(',', '') if isinstance(comissao, str) else str(comissao)
+
+        # Converte para float
         valor_bruto_float = float(bruto)
         valor_comissao_float = float(comissao)
 
@@ -214,7 +223,7 @@ def extraindo_valores_mes(caminho_json, nome_mes):
 
     except ValueError:
         print(f'Valor inválido para o mês de {nome_mes}. Certifique-se de digitar um número. Tente novamente.')
-        return None
+        return 'MES INVALIDO'
 
 def extraindo_endereco_imovel(caminho_json):
     with open(caminho_json, 'r', encoding='utf-8') as file:
