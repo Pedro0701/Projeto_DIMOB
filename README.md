@@ -1,4 +1,4 @@
-###1. Descrição geral do problema 
+### 1. Descrição geral do problema 
  A Dimob é uma Declaração de Informações sobre Atividades Imobiliárias, obrigatória 
 que deve ser entregue anualmente à Receita Federal.
 Ela deve ser declarada através de um programa próprio da Receita Federal, 
@@ -10,7 +10,7 @@ administram um total de 16 empreendimentos, cada empreendimento conta com uma
 variedade de apartamentos.
 Objetivo: utilizando a linguagem python, criar o arquivo txt no formato estabelecido pela 
 RF, e fazer a importação dele.
-###2. Obtendo os dados
+### 2. Obtendo os dados
 Como os dados vem de imobiliárias diferentes foi desenvolvido duas maneiras de coletar 
 as informações necessárias.
 Sendo que algumas imobiliárias fornecendo as informações em pdf e outras em formato 
@@ -19,7 +19,7 @@ Padronizando a entrada de dados em formato json.
 Para converter os pdf em arquivos json, foi utilizando o Google Document IA
 Os arquivos txt foram importados no excel e utilizado VBA para a extração dos dados para 
 gerar os arquivos json.
-###3. Layout exigido pelo programa da Dimob.
+### 3. Layout exigido pelo programa da Dimob.
 Dentro do programa da Dimob existe uma seção de ajuda destinada utilização do 
 programa bem como uma descrição completa do layout exigido para fazer a importação, 
 vou abordar apenas os principais tópicos para a demonstração de como o código 
