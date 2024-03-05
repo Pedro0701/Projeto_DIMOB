@@ -1,35 +1,37 @@
-## PROJETO EM DESENVOLVIMENTO
+# PROJETO EM DESENVOLVIMENTO
 
-### 1. Descrição geral do problema 
+## 1. Descrição geral do problema 
  A Dimob é uma Declaração de Informações sobre Atividades Imobiliárias, obrigatória 
 que deve ser entregue anualmente à Receita Federal.
 Ela deve ser declarada através de um programa próprio da Receita Federal, 
 disponibilizado no portal do gov.br, podendo ser preenchido manualmente as 
-informações o através de um arquivo no formato txt com um layout pré-determinado pelo 
+informações ou através de um arquivo no formato txt com um layout pré-determinado pelo 
 programa.
-A locação dos imóveis fica sobre responsabilidade, atualmente 5 imobiliárias, que juntas 
-administram um total de 16 empreendimentos, cada empreendimento conta com uma 
+Dentro da empresa que trabalho a locação dos imóveis fica sobre responsabilidade, atualmente 5 imobiliárias, que juntas 
+administram um total de 16 dos nossos empreendimentos, cada empreendimento conta com uma 
 variedade de apartamentos.
-Objetivo: utilizando a linguagem python, criar o arquivo txt no formato estabelecido pela 
+Objetivo: utilizando a linguagem python, para criar o arquivo txt no formato estabelecido pela 
 RF, e fazer a importação dele.
-### 2. Obtendo os dados
+## 2. Obtendo os dados
 Como os dados vem de imobiliárias diferentes foi desenvolvido duas maneiras de coletar 
 as informações necessárias.
-Sendo que algumas imobiliárias fornecendo as informações em pdf e outras em formato 
+Sendo que algumas imobiliárias fornecem as informações em pdf e outras em formato 
 txt.
-Padronizando a entrada de dados em formato json.
-Para converter os pdf em arquivos json, foi utilizando o Google Document IA
+Vizando a padronização de entrada no codigo python fiz a conversão dos arquivos pra o formao json.
+Para converter os pdf's em arquivos json, foi utilizando o Google Document IA.
 Os arquivos txt foram importados no excel e utilizado VBA para a extração dos dados para 
 gerar os arquivos json.
-### 3. Layout exigido pelo programa da Dimob.
+## 3. Layout exigido pelo programa da Dimob.
 Dentro do programa da Dimob existe uma seção de ajuda destinada utilização do 
 programa bem como uma descrição completa do layout exigido para fazer a importação, 
 vou abordar apenas os principais tópicos para a demonstração de como o código 
 funciona.
+
 CONVENÇÕES DE FORMATO E TAMANHO DOS CAMPOS
 Organização: Sequencial ASCII de Hex 20 a Hex 7E;
 Delimitadores de registro (EOL): Hex 0D + Hex 0A.
 Tamanho de registro: variável.
+
 Características dos registros: conforme leiaute.
 Nome do arquivo: nome válido de arquivo conforme definição MS-DOS, com extensão 
 TXT.
@@ -54,5 +56,7 @@ esquerda com brancos à direita, se CPF.
 CPF/CNPJ 2 - Campo alfanumérico com 14 posições, se CNPJ. Com 11 posições, alinhado 
 à esquerda com brancos à direita, se CPF. Aceita NDP - Não Domiciliado no País
 EOL - Sequência de caracteres Hexadecimais 0D0A, delimitador de registro
+
+
 
 ### continua
