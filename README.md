@@ -1,26 +1,10 @@
 # PROJETO EM DESENVOLVIMENTO
 
 ## 1. Descrição geral do problema 
- A Dimob é uma Declaração de Informações sobre Atividades Imobiliárias, obrigatória 
-que deve ser entregue anualmente à Receita Federal.
-Ela deve ser declarada através de um programa próprio da Receita Federal, 
-disponibilizado no portal do gov.br, podendo ser preenchido manualmente as 
-informações ou através de um arquivo no formato txt com um layout pré-determinado pelo 
-programa.
-Dentro da empresa que trabalho a locação dos imóveis fica sobre responsabilidade, atualmente 5 imobiliárias, que juntas 
-administram um total de 16 dos nossos empreendimentos, cada empreendimento conta com uma 
-variedade de apartamentos.
-Objetivo: utilizando a linguagem python, para criar o arquivo txt no formato estabelecido pela 
-RF, e fazer a importação dele.
+ A Dimob é uma Declaração de Informações sobre Atividades Imobiliárias obrigatória, que deve ser entregue anualmente à Receita Federal. Ela deve ser declarada através de um programa próprio da Receita Federal, disponibilizado no portal do Gov, podendo as informações serem preenchidas manualmente ou através de um arquivo no formato txt, com um layout pré-determinado pelo programa. 
+Dentro da empresa que trabalho a locação dos imóveis fica sobre responsabilidade, atualmente, de 5 imobiliárias, que juntas administram um total de 16 dos nossos empreendimentos, em que cada um conta com uma variedade de apartamentos. Objetivo: utilizar a linguagem python, para criar o arquivo txt no formato estabelecido pela RF e, fazer a importação dele.
 ## 2. Obtendo os dados
-Como os dados vem de imobiliárias diferentes foi desenvolvido duas maneiras de coletar 
-as informações necessárias.
-Sendo que algumas imobiliárias fornecem as informações em pdf e outras em formato 
-txt.
-Vizando a padronização de entrada no codigo python fiz a conversão dos arquivos pra o formao json.
-Para converter os pdf's em arquivos json, foi utilizando o Google Document IA.
-Os arquivos txt foram importados no excel e utilizado VBA para a extração dos dados para 
-gerar os arquivos json.
+Como os dados vem de imobiliárias diferentes, foi desenvolvido duas maneiras de coletar as informações necessárias de acordo com o que é fornecido pelas imobiliárias: em PDF ou em formato txt. Visando a padronização de entrada no código python, fiz a conversão dos arquivos pra o formato JSON. E para converter os PDF's recebidos em arquivos JSON, foi utilizado o Google Document IA. Já para a padronização dos arquivos txt, estes foram importados no excel e utilizado VBA para a extração dos dados e gerar os arquivos JSON.
 ## 3. Layout exigido pelo programa da Dimob.
 Dentro do programa da Dimob existe uma seção de ajuda destinada utilização do 
 programa bem como uma descrição completa do layout exigido para fazer a importação, 
