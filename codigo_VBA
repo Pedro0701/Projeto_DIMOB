@@ -1,1 +1,69 @@
+'Esse é aneas um exemplo, lembre-se de editar conforme a necessidade.
 
+Sub ExtrairValores()
+    ' Defina o intervalo de células no Excel
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets("cliente") ' Substitua "Planilha1" pelo nome da sua planilha
+    Dim json As String
+    
+    ' Construa o JSON usando os valores das células
+    json = "{"
+    json = json & """cpf_cnpj_cliente"": """ & ws.Range("B4").Value & ""","
+    json = json & """nome_cliente"": """ & ws.Range("A3").Value & ""","
+    json = json & """numero_contrato"": """","
+    json = json & """data_contrato"": """ & ws.Range("E4").Value & ""","
+    
+    ' Loop para os valores mensais de aluguel e comissão
+Dim i As Integer
+For i = 8 To 19
+    ' Use ponto como separador decimal e ajuste para formatar o valor como texto
+    Dim valorAluguel As String
+    Dim valorComissao As String
+    valorAluguel = Replace(ws.Range("B" & i).Value, ",", ".")
+    valorComissao = Replace(ws.Range("C" & i).Value, ",", ".")
+    
+    Dim nomeMes As String
+    nomeMes = Format(DateSerial(Year(Date), i - 7, 1), "mmmm") ' Obter o nome do mês
+    nomeMes = Replace(nomeMes, "ç", "c") ' Substituir 'ç' por 'c'
+    
+    json = json & """valor_aluguel_" & nomeMes & """: """ & valorAluguel & ""","
+    json = json & """valor_comissao_" & nomeMes & """: """ & valorComissao & ""","
+Next i
+    
+    ' Adicione as informações restantes
+    json = json & """endereco_imovel"": """ & ws.Range("C1").Value & ""","
+    json = json & """cep"": ""880100008105"""
+    json = json & "}"
+    
+    ' Gere um nome de arquivo com base no nome do cliente
+    Dim nomeCliente As String
+    nomeCliente = "cliente" ' Prefixo base
+    i = 1
+    Dim filePath As String
+    
+    ' Construa o caminho do arquivo
+    Do
+        filePath = "C:\Users\auxiliar.contabil\Magno Martins\CONTABILIDADE - Documentos\TRIBUTOS\DECLARAÇÔES\DIMOB 2024\MME TOP VISION\IBAGY\" & nomeCliente & i & ".json"
+        i = i + 1
+    Loop While Dir(filePath) <> ""
+    
+    ' Exiba o JSON na janela de Immediate (Ctrl + G para abrir)
+    Debug.Print json
+    
+    ' Abra o arquivo para gravação
+    Dim fileNumber As Integer
+    fileNumber = FreeFile
+    On Error Resume Next ' Ignorar erros temporariamente
+    Open filePath For Output As fileNumber
+    On Error GoTo 0 ' Reativar a manipulação de erros
+    
+    If fileNumber <> 0 Then
+        ' Escreva o JSON com quebras de linha após cada par de chave-valor
+        Print #fileNumber, Replace(json, ",", "," & vbCrLf)
+        
+        ' Feche o arquivo
+        Close #fileNumber
+    Else
+        MsgBox "Erro ao abrir o arquivo para gravação.", vbExclamation
+    End If
+End Sub
